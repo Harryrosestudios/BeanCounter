@@ -1,106 +1,135 @@
-# BeanCounter Project: Running Multiple Entry Points
+```markdown
+# BeanCounter
 
-This guide explains how to build and run the two main scripts in your BeanCounter project:  
-- **AddRecipe.cs** (for adding recipes to a JSON file)
-- **Program.cs** (the main blend pricing tool described in your brief)
+A command-line toolkit for managing and pricing custom coffee blends for RoastRite Ltd.
+
+---
+
+## Project Overview
+
+BeanCounter consists of two main scripts:
+
+- **AddRecipe.cs**: Interactive tool for adding new drink recipes to `recipes.json`.
+- **Program.cs**: Main pricing tool that allows you to select, customise, and price drinks based on saved recipes.
+
+Both scripts share their data models in `Models.cs`.
+
+---
 
 ## Prerequisites
 
-- [.NET SDK](https://dotnet.microsoft.com/download) installed
-- Terminal/command prompt open in your project directory
+- [.NET SDK 9.0+](https://dotnet.microsoft.com/download)
+- A terminal or command prompt
+- All scripts (`AddRecipe.cs`, `Program.cs`, `Models.cs`) in the same project directory
 
-## Running the AddRecipe Script
+---
 
-The `AddRecipe.cs` file allows you to interactively add recipes to a `recipes.json` file.
+## How to Use
 
-### Steps
+### 1. Adding a New Recipe (`AddRecipe.cs`)
 
-1. **Build the Project with AddRecipe as Entry Point**
+This script lets you create new drink recipes with all ingredient details, including per-unit weights and prices.
 
-   ```bash
-   dotnet build -p:StartupObject=BeanCounter.AddRecipe
-   ```
+**To run:**
 
-   - This tells .NET to use the `Main` method in the `AddRecipe` class as the entry point.
+```
+dotnet clean
+dotnet build -p:StartupObject=BeanCounter.AddRecipe
+dotnet bin/Debug/net9.0/BeanCounter.dll
+```
 
-2. **Run the Compiled Application**
+- Follow the prompts to enter the blend name, coffee type, roast details, milk details, and any number of syrups.
+- Syrup input format: `SyrupName NumberOfPumps Price UnitWeight` (e.g., `Vanilla 3 0.50 3`)
+- Confirm to save. The recipe is appended to `recipes.json`.
 
-   ```bash
-   dotnet bin/Debug/net9.0/BeanCounter.dll
-   ```
+---
 
-   - Adjust `net9.0` if your target framework is different.
+### 2. Pricing and Customising Drinks (`Program.cs`)
 
-3. **Follow the Prompts**
+This script lets you select a saved recipe, choose size and options, and see a full price breakdown.
 
-   - Enter blend name, coffee type, roast name and price, milk type, and syrups as prompted.
-   - Confirm to save the recipe to `recipes.json`.
+**To run:**
 
-## Switching to the Main Blend Pricing Tool (`Program.cs`)
+```
+dotnet clean
+dotnet build -p:StartupObject=BeanCounter.Program
+dotnet bin/Debug/net9.0/BeanCounter.dll
+```
 
-The `Program.cs` file implements the main functionality described in your brief:
+- Select a blend from the list.
+- Choose a size: Small, Medium (×1.5), Large (×2), or Custom (enter units for each ingredient).
+- Optionally change the milk (non-dairy adds £0.40).
+- Optionally make it decaf (subtracts £0.40).
+- The script displays a detailed ingredient and price breakdown.
 
-- **Inputs:**
-  - Blend name (string)
-  - Batch size in kilograms (decimal)
-  - Up to five bean components:
-    - Origin code (e.g., “BRA-Santos”)
-    - Weight in the blend (kg or g)
-
-- **Outputs:**
-  ```
-  <Blend Name> – Batch: <X> kg
-  Ingredient cost  : £<…>
-  Packaging cost   : —
-  Roasting loss    : —
-  ----------------------------
-  Cost / kg        : £<…>
-  Total batch £    : £<…>
-  ```
-
-### Steps
-
-1. **Build the Project with Program as Entry Point**
-
-   ```bash
-   dotnet build -p:StartupObject=BeanCounter.Program
-   ```
-
-   - This sets the entry point to the `Main` method in the `Program` class.
-
-2. **Run the Compiled Application**
-
-   ```bash
-   dotnet bin/Debug/net9.0/BeanCounter.dll
-   ```
-
-   - Again, adjust `net9.0` if needed.
-
-3. **Follow the Prompts**
-
-   - Enter the blend name, batch size, and up to five bean components as requested.
-   - The program will output the cost breakdown as specified.
+---
 
 ## Switching Between Scripts
 
-- **To run `AddRecipe.cs`:**  
-  Build with `-p:StartupObject=BeanCounter.AddRecipe`  
-- **To run `Program.cs`:**  
-  Build with `-p:StartupObject=BeanCounter.Program`
+**Important:**  
+If you want to switch between `AddRecipe.cs` and `Program.cs`, always run:
 
-You can switch between these tools at any time by rebuilding with the appropriate `StartupObject` parameter.
+```
+dotnet clean
+dotnet build -p:StartupObject=BeanCounter.[AddRecipe|Program]
+dotnet bin/Debug/net9.0/BeanCounter.dll
+```
+
+- Replace `[AddRecipe|Program]` with the entry point you want.
+- `dotnet clean` ensures the correct entry point is used (otherwise, .NET may run the previous script).
+
+---
+
+## Shared Models
+
+Both scripts use `Models.cs` for the `Recipe` and `Syrup` classes.  
+**Do not duplicate these classes in your script files.**
+
+---
 
 ## Troubleshooting
 
-- If you see an error about multiple entry points, ensure you are specifying the correct `StartupObject` when building.
-- If you change the target framework, update the path in the run command accordingly.
+- If you see prompts from the wrong script, you likely need to `dotnet clean` and rebuild with the correct `StartupObject`.
+- Always use the correct case for class names: `BeanCounter.Program` and `BeanCounter.AddRecipe`.
+- If you change your target framework, update the DLL path accordingly.
 
-## Example Commands
+---
 
-| Task                        | Build Command                                         | Run Command                                      |
-|-----------------------------|------------------------------------------------------|--------------------------------------------------|
-| Add Recipe Tool             | `dotnet build -p:StartupObject=BeanCounter.AddRecipe`| `dotnet bin/Debug/net9.0/BeanCounter.dll`        |
-| Main Blend Pricing Tool     | `dotnet build -p:StartupObject=BeanCounter.Program`  | `dotnet bin/Debug/net9.0/BeanCounter.dll`        |
+## Example Workflow
 
-**Tip:**  
-If you frequently switch between these tools, consider creating separate projects for each, or use scripts to automate the build/run process.
+**Add a recipe:**
+```
+dotnet clean
+dotnet build -p:StartupObject=BeanCounter.AddRecipe
+dotnet bin/Debug/net9.0/BeanCounter.dll
+```
+
+**Price a drink:**
+```
+dotnet clean
+dotnet build -p:StartupObject=BeanCounter.Program
+dotnet bin/Debug/net9.0/BeanCounter.dll
+```
+
+---
+
+## File Structure
+
+```
+BeanCounter/
+├── AddRecipe.cs
+├── Program.cs
+├── Models.cs
+├── recipes.json
+└── README.md
+```
+
+---
+
+## Notes
+
+- All monetary values are in GBP and shown to two decimal places.
+- All input is validated at the console.
+- Recipes are stored in `recipes.json` in the project directory.
+```
+
