@@ -1,0 +1,15 @@
+/Users/harry.rose/Documents/coding/BeanCounter/bin/Debug/net9.0/BeanCounter
+/Users/harry.rose/Documents/coding/BeanCounter/bin/Debug/net9.0/BeanCounter.deps.json
+/Users/harry.rose/Documents/coding/BeanCounter/bin/Debug/net9.0/BeanCounter.runtimeconfig.json
+/Users/harry.rose/Documents/coding/BeanCounter/bin/Debug/net9.0/BeanCounter.dll
+/Users/harry.rose/Documents/coding/BeanCounter/bin/Debug/net9.0/BeanCounter.pdb
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.GeneratedMSBuildEditorConfig.editorconfig
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.AssemblyInfoInputs.cache
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.AssemblyInfo.cs
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.csproj.CoreCompileInputs.cache
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.sourcelink.json
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.dll
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/refint/BeanCounter.dll
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.pdb
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/BeanCounter.genruntimeconfig.cache
+/Users/harry.rose/Documents/coding/BeanCounter/obj/Debug/net9.0/ref/BeanCounter.dll
