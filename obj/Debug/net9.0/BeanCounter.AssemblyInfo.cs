@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BeanCounter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+645518090f8286ec56080f0d94f0bdf18edac905")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ebc8e396698d49ffd0b4917211a13c055e58cb9a")]
 [assembly: System.Reflection.AssemblyProductAttribute("BeanCounter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BeanCounter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

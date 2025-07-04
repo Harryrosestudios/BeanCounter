@@ -1,0 +1,13 @@
+[
+  {
+    "BlendName": "Italian",
+    "CoffeeType": "Beans",
+    "RoastName": "Italian",
+    "RoastPrice": 4.20,
+    "RoastUnitWeight": 26,
+    "MilkType": "Whole",
+    "MilkPrice": 0.30,
+    "MilkUnitWeight": 40,
+    "Syrups": []
+  }
+]

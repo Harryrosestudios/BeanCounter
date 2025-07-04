@@ -22,20 +22,32 @@ namespace BeanCounter
                 recipe.CoffeeType = SelectFromMenu("Select Coffee Type:", coffeeTypes);
 
                 // 3. Roast Name and Price
-                Console.Write("Enter Roast Name and Price (e.g., \"Italian 06.24\"): ");
+                Console.Write("Enter Roast Name and Price (e.g., \"Italian 0.80\"): ");
                 (string roastName, decimal roastPrice) = ReadRoastNameAndPrice();
                 recipe.RoastName = roastName;
                 recipe.RoastPrice = roastPrice;
+
+                // 3a. Roast Unit Weight
+                Console.Write("Enter roast unit weight in grams (e.g., 18 for a shot): ");
+                recipe.RoastUnitWeight = ReadPositiveDouble();
 
                 // 4. Milk Type
                 var milkTypes = new List<string> { "Whole", "Skim", "Oat", "Almond" };
                 recipe.MilkType = SelectFromMenu("Select Milk Type:", milkTypes);
 
+                // 4a. Milk Price
+                Console.Write("Enter milk price per unit (e.g., 0.30): ");
+                recipe.MilkPrice = ReadPositiveDecimal();
+
+                // 4b. Milk Unit Weight
+                Console.Write("Enter milk unit weight in ml (e.g., 200): ");
+                recipe.MilkUnitWeight = ReadPositiveDouble();
+
                 // 5. Syrups
                 recipe.Syrups = new List<Syrup>();
                 while (true)
                 {
-                    Console.Write("Add a syrup (\"SyrupName NumberOfPumps Price\") or \"done\": ");
+                    Console.Write("Add a syrup (\"SyrupName NumberOfPumps Price UnitWeight\") or \"done\": ");
                     var syrupInput = Console.ReadLine();
                     if (syrupInput == null)
                     {
@@ -52,7 +64,7 @@ namespace BeanCounter
                     }
                     else
                     {
-                        Console.WriteLine("Invalid syrup format. Please try again.");
+                        Console.WriteLine("Invalid syrup format. Please use \"SyrupName NumberOfPumps Price UnitWeight\".");
                     }
                 }
 
@@ -119,7 +131,7 @@ namespace BeanCounter
                 var parts = input.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length != 2)
                 {
-                    Console.Write("Invalid format. Use \"RoastName Price\" (e.g., Italian 06.24): ");
+                    Console.Write("Invalid format. Use \"RoastName Price\" (e.g., Italian 0.80): ");
                     continue;
                 }
 
@@ -132,6 +144,28 @@ namespace BeanCounter
             }
         }
 
+        static decimal ReadPositiveDecimal()
+        {
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (decimal.TryParse(input, out decimal value) && value >= 0)
+                    return value;
+                Console.Write("Please enter a non-negative decimal number: ");
+            }
+        }
+
+        static double ReadPositiveDouble()
+        {
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (double.TryParse(input, out double value) && value > 0)
+                    return value;
+                Console.Write("Please enter a positive number: ");
+            }
+        }
+
         static bool TryParseSyrup(string input, out Syrup? syrup)
         {
             syrup = null;
@@ -139,7 +173,7 @@ namespace BeanCounter
                 return false;
 
             var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 3)
+            if (parts.Length != 4)
                 return false;
 
             string name = parts[0];
@@ -149,7 +183,10 @@ namespace BeanCounter
             if (!decimal.TryParse(parts[2], out decimal price) || price < 0)
                 return false;
 
-            syrup = new Syrup { Name = name, Pumps = pumps, Price = price };
+            if (!int.TryParse(parts[3], out int unitWeight) || unitWeight <= 0)
+                return false;
+
+            syrup = new Syrup { Name = name, Pumps = pumps, Price = price, UnitWeight = unitWeight };
             return true;
         }
 
@@ -158,8 +195,8 @@ namespace BeanCounter
             Console.WriteLine("\n--- Recipe Summary ---");
             Console.WriteLine($"Blend: {recipe.BlendName}");
             Console.WriteLine($"Coffee Type: {recipe.CoffeeType}");
-            Console.WriteLine($"Roast: {recipe.RoastName} (£{recipe.RoastPrice:0.00})");
-            Console.WriteLine($"Milk: {recipe.MilkType}");
+            Console.WriteLine($"Roast: {recipe.RoastName} (£{recipe.RoastPrice:0.00} per unit, {recipe.RoastUnitWeight}g/unit)");
+            Console.WriteLine($"Milk: {recipe.MilkType} (£{recipe.MilkPrice:0.00} per unit, {recipe.MilkUnitWeight}ml/unit)");
             Console.WriteLine("Syrups:");
             if (recipe.Syrups == null || recipe.Syrups.Count == 0)
             {
@@ -168,7 +205,7 @@ namespace BeanCounter
             else
             {
                 foreach (var s in recipe.Syrups)
-                    Console.WriteLine($"  - {s.Name}, {s.Pumps} pump{(s.Pumps != 1 ? "s" : "")}, £{s.Price:0.00}");
+                    Console.WriteLine($"  - {s.Name}, {s.Pumps} pumps, £{s.Price:0.00} per unit, {s.UnitWeight} pump(s)/unit");
             }
             Console.WriteLine();
         }
@@ -189,7 +226,6 @@ namespace BeanCounter
                     }
                     catch
                     {
-                        // If JSON is corrupted or invalid, overwrite with new list
                         recipes = new List<Recipe>();
                     }
                 }
@@ -202,22 +238,4 @@ namespace BeanCounter
             File.WriteAllText(file, newJson);
         }
     }
-
-    public class Recipe
-    {
-        public string? BlendName { get; set; }
-        public string? CoffeeType { get; set; }
-        public string? RoastName { get; set; }
-        public decimal RoastPrice { get; set; }
-        public string? MilkType { get; set; }
-        public List<Syrup>? Syrups { get; set; }
-    }
-
-    public class Syrup
-    {
-        public string? Name { get; set; }
-        public int Pumps { get; set; }
-        public decimal Price { get; set; }
-    }
 }
-
